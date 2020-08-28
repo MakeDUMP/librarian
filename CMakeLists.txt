@@ -24,3 +24,7 @@ target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Werror)
 if(WIN32 AND CMAKE_CXX_COMPILER_ID MATCHES "GNU")
     target_link_options(${PROJECT_NAME} PRIVATE -static-libgcc -Wl,-static,-lpthread)
 endif()
+
+# --[ Libraries ] -------------------------------------------------------------
+add_subdirectory(logger)
+target_link_libraries(${PROJECT_NAME} logger)

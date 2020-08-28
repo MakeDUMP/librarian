@@ -1,8 +1,7 @@
-#include <cstdio>
-#include <cstdlib>
+#include <logger.hpp>
 
 auto main() -> int
 {
-    puts("Heir To Empire");
-    return EXIT_SUCCESS;
+    makedump::logger logger { makedump::logger::format("{white+}", ">>>") };
+    logger.print("{green+}", "Heir To Empire");
 }
