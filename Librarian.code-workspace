@@ -14,7 +14,8 @@
 		"C_Cpp.default.compilerArgs": [],
 		"C_Cpp.default.defines": [],
 		"C_Cpp.default.includePath": [
-			"logger/src"
+			"logger/src",
+			"curl/include"
 		],
 	}
 }

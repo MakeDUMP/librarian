@@ -25,6 +25,27 @@ if(WIN32 AND CMAKE_CXX_COMPILER_ID MATCHES "GNU")
     target_link_options(${PROJECT_NAME} PRIVATE -static-libgcc -Wl,-static,-lpthread)
 endif()
 
-# --[ Libraries ] -------------------------------------------------------------
+# --[ Logger ] ----------------------------------------------------------------
 add_subdirectory(logger)
 target_link_libraries(${PROJECT_NAME} logger)
+
+# --[ Curl ] ------------------------------------------------------------------
+set(BUILD_SHARED_LIBS OFF)
+set(BUILD_CURL_EXE OFF)
+set(BUILD_TESTING OFF)
+set(HTTP_ONLY ON)
+set(ENABLE_IPV6 OFF)
+set(CURL_DISABLE_COOKIES ON)
+set(CURL_DISABLE_CRYPTO_AUTH ON)
+set(CURL_DISABLE_VERBOSE_STRINGS OFF)
+set(CMAKE_USE_OPENSSL ON)
+set(OPENSSL_USE_STATIC_LIBS ON)
+
+execute_process(COMMAND cmake -E copy ${CMAKE_CURRENT_LIST_DIR}/curl/CMakeLists.txt ${CMAKE_CURRENT_BINARY_DIR}/CMakeLists.bak)
+file(READ "curl/CMakeLists.txt" FILE)
+string(REGEX REPLACE "(set\\(CURL_LIBS \\\${CURL_LIBS} \"crypt32)\"\\)" "\\1;ws2_32\")" FILE "${FILE}")
+file(WRITE "curl/CMakeLists.txt" "${FILE}")
+add_subdirectory(curl)
+execute_process(COMMAND cmake -E copy ${CMAKE_CURRENT_BINARY_DIR}/CMakeLists.bak ${CMAKE_CURRENT_LIST_DIR}/curl/CMakeLists.txt)
+
+target_link_libraries(${PROJECT_NAME} libcurl)
